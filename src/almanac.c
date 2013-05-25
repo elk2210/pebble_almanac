@@ -10,7 +10,7 @@
 
 #define MY_UUID { 0x02, 0xFC, 0xB5, 0x2F, 0xD4, 0x05, 0x4F, 0xD7, 0xB1, 0x13, 0x11, 0xE9, 0x76, 0x2B, 0xCA, 0x0C }
 PBL_APP_INFO(MY_UUID,
-             "Almanac", "Chad Harp",
+             "Almanac_Berlin", "Chad Harp & Julian Starke",
              0, 2, /* App version */
              RESOURCE_ID_ALMANAC_MENU_ICON,
              APP_INFO_WATCH_FACE);
@@ -139,7 +139,7 @@ void handle_day(AppContextRef ctx, PebbleTickEvent* t)
     static char setText[] = "00:00a 00:00a";
     static char moon1Text[] = "<00:00a\n<00:00a";
     static char moon2Text[] = "00:00a>\n00:00a>";
-    static char date[] = "00/00/0000";
+    static char date[] = "00. 00. 0000";
     static char moon[] = "m";
     static char moonp[] = "-----";
     char riseTemp[] = "00:00a";
@@ -240,9 +240,16 @@ void handle_minute_tick(AppContextRef ctx, PebbleTickEvent* t)
     // on the top of the hour
     if (t->tick_time->tm_min == 0) {
 #ifdef VIBHOUR
+		 // Vibe pattern: ON for 200ms, OFF for 100ms, ON for 400ms:
+		// static const uint32_t const segments[] = { 200, 100, 400 };
+		static const uint32_t const segments[] = { 50, 0, 0 };
+		VibePattern pat = {
+		  .durations = segments,
+		  .num_segments = ARRAY_LENGTH(segments),
+		};
         // vibrate once if between 6am and 10pm
         if (t->tick_time->tm_hour >= 6 && t->tick_time->tm_hour <= 22)
-            vibes_short_pulse();
+            vibes_enqueue_custom_pattern(pat);
 #endif
         //perform daily tasks is hour is 0
         if (t->tick_time->tm_hour == 0)
