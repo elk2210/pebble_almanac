@@ -242,7 +242,7 @@ void handle_minute_tick(AppContextRef ctx, PebbleTickEvent* t)
 #ifdef VIBHOUR
 		 // Vibe pattern: ON for 200ms, OFF for 100ms, ON for 400ms:
 		// static const uint32_t const segments[] = { 200, 100, 400 };
-		static const uint32_t const segments[] = { 50, 0, 0 };
+		static const uint32_t const segments[] = { 50 };
 		VibePattern pat = {
 		  .durations = segments,
 		  .num_segments = ARRAY_LENGTH(segments),
